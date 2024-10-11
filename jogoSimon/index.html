@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simon Game - Home</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Helvetica Neue', Arial, sans-serif; /* Fonte moderna e limpa */
+            margin: 130px;
+            padding: 20px;
+            transition: background-color 0.5s ease; /* Transição suave entre as cores */
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 40px; /* Aumentando o padding para mais espaço interno */
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Sombreamento mais forte */
+            max-width: 900px; /* Definindo uma largura máxima para manter o layout controlado */
+            margin: 40px auto; /* Centralizando e adicionando margem superior e inferior */
+            transition: transform 0.3s ease; /* Efeito de transformação na container */
+        }
+
+        .container:hover {
+            transform: translateY(-5px); /* Levanta a container ao passar o mouse */
+        }
+
+        h1 {
+            text-align: center; /* Centralizando o título */
+            color: #333; /* Cor do título */
+        }
+
+        p {
+            text-align: center; /* Centralizando o texto */
+            color: #666; /* Cor do texto */
+            margin-bottom: 30px; /* Adicionando margem inferior para espaçamento */
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Permite que os botões se ajustem em várias linhas */
+            margin: 20px 0; /* Margin para o espaço entre os botões */
+        }
+
+        .button {
+            width: 100px; /* Diminuindo a largura dos botões */
+            height: 90px; /* Aumentando a altura dos botões */
+            margin: 15px; /* Espaço entre os botões */
+            border-radius: 12px;
+            border: none;
+            color: white;
+            font-size: 1.0em; /* Tamanho da fonte ajustado */
+            cursor: pointer;
+            position: relative; /* Necessário para o efeito de pseudo-elemento */
+            overflow: hidden; /* Para esconder o pseudo-elemento que cria o efeito de brilho */
+            display: flex; /* Flexbox para centralizar o texto */
+            align-items: center; /* Alinha verticalmente */
+            justify-content: center; /* Alinha horizontalmente */
+            text-align: center; /* Centraliza o texto no botão */
+            transition: transform 0.2s ease; /* Transições suaves para o botão */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra suave nos botões */
+        }
+
+        .red {
+            background-color: #e74c3c;
+        }
+
+        .blue {
+            background-color: #3498db;
+        }
+
+        .green {
+            background-color: #2ecc71;
+        }
+
+        .yellow {
+            background-color: #f1c40f;
+        }
+
+        /* Efeito de brilho */
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: transform 0.5s ease;
+            transform: translate(-50%, -50%) scale(0); /* Começa invisível */
+            z-index: 0; /* Coloca o efeito atrás do texto */
+        }
+
+        .button:hover::before {
+            transform: translate(-50%, -50%) scale(1); /* Aumenta o efeito ao passar o mouse */
+        }
+
+        .button:hover {
+            transform: scale(1.1); /* Aumenta o tamanho do botão ao passar o mouse */
+        }
+
+        .button span {
+            position: relative; /* Para o texto do botão ficar acima do efeito */
+            z-index: 1; /* Coloca o texto acima do efeito de brilho */
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <h1>Bem-vindo ao Simon Game!</h1>
+        <p>Um jogo de memória interativo onde você deve repetir sequências de cores e sons.</p>
+        <div class="buttons">
+            <a href="login.html" class="button red"><span>Login</span></a>
+            <a href="cadastro.html" class="button blue"><span>Cadastro</span></a>
+            <a href="game.html" class="button green"><span>Jogar</span></a>
+            <a href="sobre.html" class="button yellow"><span>Sobre</span></a> <!-- Botão "Sobre" adicionado -->
+        </div>
+    </div>
+
+    <script>
+        const colors = ['#e74c3c', '#2ecc71', '#3498db', '#f1c40f'];
+        let currentIndex = 0;
+
+        setInterval(() => {
+            document.body.style.backgroundColor = colors[currentIndex];
+            currentIndex = (currentIndex + 1) % colors.length;
+        }, 3000); // Alterna as cores a cada 3 segundos
+    </script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simon Game</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    body {
+        background-color: #2ecc71;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    h2, h3 {
+        margin-top: 20px;
+    }
+
+    p.lead {
+        font-size: 1.25rem;
+        margin-bottom: 20px;
+    }
+
+    .game-buttons {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 20px 0;
+    }
+
+    .button {
+        width: 100px;
+        height: 100px;
+        margin: 10px;
+        border-radius: 10px;
+        border: none;
+        font-size: 1.5em;
+        cursor: pointer;
+        transition: transform 0.3s, opacity 0.3s;
+        opacity: 0.7;
+    }
+
+    .red { background-color: #e74c3c; }
+    .blue { background-color: #3498db; }
+    .green { background-color: #2ecc71; }
+    .yellow { background-color: #f1c40f; }
+
+    .button:hover {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    .buttonC {
+        background-color: #21b05d;
+        color: #ffffff;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+    }
+
+    .buttonC:hover {
+        background-color: #1a964e;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .ranking {
+        margin-top: 30px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .ranking h3 {
+        margin-bottom: 15px;
+    }
+
+    .ranking ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .ranking li {
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        margin: 5px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .ranking li:nth-child(odd) {
+        background-color: #efefef;
+    }
+
+    #login-form, #register-form {
+        display: none; /* Oculta os formulários até o jogador interagir */
+    }
+
+    .prize {
+        font-size: 1.5rem;
+        color: gold;
+        margin-bottom: 20px;
+    }
+</style>
+
+<body>
+    <a href="index.html" class="buttonC">Voltar ao Início</a>
+
+    <div class="container text-center mt-5">
+        <h1>Simon Game</h1>
+        <h2 id="username-display"></h2>
+        <p class="lead">Como jogar:</p>
+        <p>O objetivo do jogo é repetir a sequência de cores que o jogo apresenta.</p>
+        <p>Cada vez que você acerta, a sequência aumenta. Você deve clicar nas cores na mesma ordem.</p>
+        <button id="start-button" class="btn btn-success btn-lg mt-3">Iniciar Jogo</button>
+        <h2 id="score" class="mt-3">Pontuação: 0</h2>
+
+        <div class="game-buttons mt-4">
+            <div class="button red" data-color="red"></div>
+            <div class="button blue" data-color="blue"></div>
+            <div class="button green" data-color="green"></div>
+            <div class="button yellow" data-color="yellow"></div>
+        </div>
+
+        
+        <!-- Ranking -->
+        <div class="ranking mt-5">
+            <h3>Ranking🏆</h3><!-- Prêmio -->
+        <div class="prize">
+             Descubra o melhor jogador de SIMON!
+        </div>
+
+            <ul id="ranking-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        const colors = ["red", "blue", "green", "yellow"];
+        let sequence = [];
+        let playerSequence = [];
+        let score = 0;
+
+        // Mostrar nome do jogador logado
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            document.getElementById('username-display').innerText = `Bem-vindo, ${currentUser}`;
+        } else {
+            alert('Você precisa estar logado para jogar.');
+            window.location.href = 'login.html';
+        }
+
+        // Iniciar o jogo ao clicar no botão "Iniciar Jogo"
+        document.getElementById('start-button').addEventListener('click', startGame);
+
+        function startGame() {
+            score = 0;
+            sequence = [];
+            playerSequence = [];
+            document.getElementById('score').innerText = `Pontuação: ${score}`;
+            nextSequence();
+        }
+
+        // Gerar a próxima cor da sequência
+        function nextSequence() {
+            playerSequence = [];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            sequence.push(randomColor);
+            showSequence();
+        }
+
+        // Mostrar a sequência ao jogador piscando os botões
+        function showSequence() {
+            sequence.forEach((color, index) => {
+                setTimeout(() => {
+                    flashButton(color);
+                }, index * 1000);
+            });
+        }
+
+        // Função para piscar um botão
+        function flashButton(color) {
+            const button = document.querySelector(`.button.${color}`);
+            button.style.opacity = 1;
+            setTimeout(() => {
+                button.style.opacity = 0.7;
+            }, 500);
+        }
+
+        // Adicionar evento de clique aos botões
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const color = event.target.getAttribute('data-color');
+                playerSequence.push(color);
+                flashButton(color);
+                checkSequence(playerSequence.length - 1);
+            });
+        });
+
+        // Verificar a sequência que o jogador está inserindo
+        function checkSequence(currentIndex) {
+            if (playerSequence[currentIndex] !== sequence[currentIndex]) {
+                alert(`Errado! A sequência era ${sequence.join(', ')}. Você fez ${score} pontos!`);
+                saveScore(currentUser, score); // Salva a pontuação no ranking
+                updateRanking(); // Atualiza o ranking
+                return; // Termina o jogo se errar
+            }
+
+            // Se acertar toda a sequência
+            if (playerSequence.length === sequence.length) {
+                score++;
+                document.getElementById('score').innerText = `Pontuação: ${score}`; // Atualiza a pontuação na tela
+                setTimeout(() => {
+                    nextSequence();
+                }, 1000); // Aguardar 1 segundo antes de mostrar a próxima sequência
+            }
+        }
+
+        // Funções para salvar e exibir a pontuação no ranking
+        function saveScore(username, score) {
+            let usersData = JSON.parse(localStorage.getItem('usersData')) || {};
+            usersData[username] = Math.max(score, usersData[username] || 0);
+            localStorage.setItem('usersData', JSON.stringify(usersData));
+        }
+
+        function updateRanking() {
+            const usersData = JSON.parse(localStorage.getItem('usersData')) || {};
+            const rankingList = document.getElementById('ranking-list');
+            rankingList.innerHTML = '';
+
+            const sortedUsers = Object.entries(usersData).sort((a, b) => b[1] - a[1]);
+            sortedUsers.forEach(([username, score], index) => {
+                const listItem = document.createElement('li');
+                listItem.innerText = `${index + 1}. ${username} - ${score} pontos`;
+                rankingList.appendChild(listItem);
+            });
+        }
+
+        // Atualiza o ranking ao carregar a página
+        window.onload = updateRanking;
+    </script>
+    <script src="js/cadastro.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Simon Game</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #007bbe, #79ccff);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative; /* Para posicionar o botão corretamente */
+        }
+
+        .back-button {
+            position: absolute; /* Posiciona o botão no canto */
+            top: 20px; /* Distância do topo */
+            left: 20px; /* Distância da esquerda */
+            z-index: 10; /* Para garantir que o botão fique acima de outros elementos */
+            background-color: #2fa9e7; /* Cor de fundo vermelha */
+            border: 2px solid #ffffff; /* Borda branca */
+            color: #fff; /* Texto branco */
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease; /* Suaviza as mudanças de estilo */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Leve sombra para destacar */
+        }
+
+        .back-button:hover {
+            background-color: #2fa9e7; /* Muda a cor de fundo no hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra mais forte ao passar o mouse */
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #004275;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #0091c6;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input:focus {
+            border-color: #2164b0;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #5abaff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #07458d;
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        a {
+            color: #004996;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">Voltar ao Início</a> <!-- Botão para voltar à página inicial -->
+    <div class="container">
+        <h1>Cadastro</h1>
+        <form id="register-form">
+            <label for="username">Usuário:</label>
+            <input type="text" id="username" required>
+            <label for="password">Senha:</label>
+            <input type="password" id="password" required>
+            <button type="submit" class="button">Cadastrar</button>
+        </form>
+        <p>Já tem uma conta? <a href="login.html">Entre aqui!</a></p>
+    </div>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (localStorage.getItem(username)) {
+                alert('Usuário já existe.');
+            } else {
+                localStorage.setItem(username, JSON.stringify({ password }));
+                alert('Cadastro realizado com sucesso!');
+                window.location.href = 'login.html'; // Redireciona para a página de login
+            }
+        });
+    </script>
+</body>
+</html>
